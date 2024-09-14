@@ -7,9 +7,12 @@ import {
   View,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useEffect, useRef, useState } from "react";
+import config from "@/config.json";
 
 export default function Home() {
   const [permission, requestPermission] = useCameraPermissions();
+  const cameraRef = useRef<CameraView>(null);
 
   if (!permission || !permission.granted) {
     return (
@@ -19,11 +22,32 @@ export default function Home() {
     );
   }
 
+  function handleTakePicture() {
+    cameraRef.current
+      ?.takePictureAsync({ base64: true, quality: 0 })
+      .then((data) => {
+        fetch(config.API_URL + "/image-description", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user_id: "1", b64_image: data?.base64 }),
+        })
+          .then((res) => res.json())
+          .then((data) => alert(data.long));
+      });
+  }
+
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing="back">
+      <CameraView
+        style={styles.camera}
+        facing="back"
+        ref={cameraRef}
+        pictureSize="Medium"
+      >
         <View style={styles.btn}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleTakePicture}>
             <MaterialCommunityIcons
               name="camera-iris"
               size={60}
