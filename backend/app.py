@@ -1,0 +1,46 @@
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import List
+from prompts import *
+import llm
+
+class SentenceGenPayload(BaseModel):
+    user_id: str
+    emoji_seq: List[str]
+
+class ImageDescPayload(BaseModel):
+    user_id: str
+    b64_image: str
+
+class ImageGenPayload(BaseModel):
+    user_id: str
+    description: str
+
+class RecommendationPayload(BaseModel):
+    user_id: str
+    emoji_seq: List[str]
+
+app = FastAPI()
+
+@app.get("/")
+async def index():
+    return "all systems nominal"
+
+@app.post("/sentence-gen")
+async def sentence_gen(payload: SentenceGenPayload):
+    return llm.run_text(
+        SENTENCE_GEN_PROMPT,
+        emoji_seq=",".join(payload.emoji_seq)
+    )
+
+@app.post("/image-description")
+async def image_description(payload: ImageDescPayload):
+    return "apple"
+
+@app.post("/image-gen")
+async def image_gen(payload: ImageGenPayload):
+    return "here have image"
+
+@app.post("/recommend")
+async def recommend(payload: RecommendationPayload):
+    return "get some sleep"
