@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
 from prompts import *
+import json
 import llm
 
 class SentenceGenPayload(BaseModel):
@@ -35,7 +36,10 @@ async def sentence_gen(payload: SentenceGenPayload):
 
 @app.post("/image-description")
 async def image_description(payload: ImageDescPayload):
-    return "apple"
+    return llm.run_multimodal(
+        PICTURE_TO_TEXT_PROMPT,
+        image=payload.b64_image
+    )
 
 @app.post("/image-gen")
 async def image_gen(payload: ImageGenPayload):

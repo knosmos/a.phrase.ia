@@ -1,6 +1,6 @@
 import json
 import requests
-from langchain_core.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 
@@ -12,8 +12,31 @@ def run_text(template, **kwargs):
         openai_api_base="https://proxy.tune.app/",
         model_name="kaushikaakash04/tune-blob"
     )
-    return chat_model.predict(
-        PromptTemplate.from_template(
-            template
-        ).format(**kwargs)
+    prompt = PromptTemplate.from_template(template)
+    chain = prompt | chat_model
+    resp = chain.invoke(kwargs)
+    return resp.content
+
+def run_multimodal(template, image, **kwargs):
+    chat_model = ChatOpenAI(
+        openai_api_key=api_key,
+        openai_api_base="https://proxy.tune.app/",
+        model_name="mistral/pixtral-12B-2409"
     )
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", template),
+            ("user",
+                [
+                    {
+                        "type": "image_url",
+                        # "image_url": {"url": "data:image/jpeg;base64,{image}"},
+                        "image_url": {"url": "{image}"},
+                    }
+                ],
+            ),
+        ]
+    )
+    chain = prompt | chat_model
+    resp = chain.invoke({"image": image})
+    return json.loads(resp.content.replace("```json","").replace("```",""))
