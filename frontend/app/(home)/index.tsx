@@ -10,6 +10,7 @@ import {
   FlatList,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import config from "@/config.json";
 
 const chunks = (a: any[], size: number) =>
   Array.from(new Array(Math.ceil(a.length / size)), (_, i) =>
@@ -25,19 +26,31 @@ export default function Home() {
     setRecs(["🍕", "🍔", "🍟", "🍦", "🍩", "🍪", "🍫", "🍬", "🍭", "🍮"]);
   }, []);
 
+  function handleSetenceGen() {
+    fetch(config.API_URL + "/sentence-gen", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user_id: "1", emoji_seq: emojis }),
+    })
+      .then((res) => res.json())
+      .then((data) => alert(data));
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.emojicontainer}>
           <ScrollView horizontal style={styles.emojis}>
             {emojis.length > 0 ? (
-              emojis.map((emoji) => <Emoji size={40} data={emoji} />)
+              emojis.map((emoji, i) => <Emoji key={i} size={40} data={emoji} />)
             ) : (
               <Emoji muted size={40} data="..." />
             )}
           </ScrollView>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleSetenceGen}>
           <AntDesign name="rightcircleo" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
@@ -46,9 +59,12 @@ export default function Home() {
         <FlatList
           data={chunks(recs, 5)}
           renderItem={({ item }) => (
-            <View key={item[0]} style={styles.row}>
-              {item.map((x) => (
-                <TouchableOpacity onPress={() => setEmojis([...emojis, x])}>
+            <View style={styles.row}>
+              {item.map((x, i) => (
+                <TouchableOpacity
+                  key={i}
+                  onPress={() => setEmojis([...emojis, x])}
+                >
                   <EmojiRec item={x} />
                 </TouchableOpacity>
               ))}
