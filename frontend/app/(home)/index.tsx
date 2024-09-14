@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import config from "@/config.json";
+import { Link } from "expo-router";
 
 const chunks = (a: any[], size: number) =>
   Array.from(new Array(Math.ceil(a.length / size)), (_, i) =>
@@ -41,6 +42,9 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <Link href="/(home)/camera">
+          <AntDesign name="camera" size={24} color="black" />
+        </Link>
         <View style={styles.emojicontainer}>
           <ScrollView horizontal style={styles.emojis}>
             {emojis.length > 0 ? (
