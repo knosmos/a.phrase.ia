@@ -27,13 +27,16 @@ export default function Home() {
     setRecs(["🍕", "🍔", "🍟", "🍦", "🍩", "🍪", "🍫", "🍬", "🍭", "🍮"]);
   }, []);
 
-  function handleSetenceGen() {
+  function handleSetenceGen(punctuation: string) {
     fetch(config.API_URL + "/sentence-gen", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user_id: "1", emoji_seq: emojis }),
+      body: JSON.stringify({
+        user_id: "1",
+        emoji_seq: [...emojis, punctuation],
+      }),
     })
       .then((res) => res.json())
       .then((data) => alert(data));
@@ -42,9 +45,6 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Link href="/(home)/camera">
-          <AntDesign name="camera" size={24} color="black" />
-        </Link>
         <View style={styles.emojicontainer}>
           <ScrollView horizontal style={styles.emojis}>
             {emojis.length > 0 ? (
@@ -54,12 +54,24 @@ export default function Home() {
             )}
           </ScrollView>
         </View>
-        <TouchableOpacity onPress={handleSetenceGen}>
-          <AntDesign name="rightcircleo" size={24} color="#fff" />
-        </TouchableOpacity>
+        <Link href="/(home)/camera">
+          <AntDesign name="camera" size={36} color="black" />
+        </Link>
       </View>
 
       <View style={styles.grid}>
+        <View style={styles.row}>
+          <TouchableOpacity onPress={() => handleSetenceGen(".")}>
+            <EmojiRec item={"."} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleSetenceGen("?")}>
+            <EmojiRec item={"?"} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleSetenceGen("!")}>
+            <EmojiRec item={"!"} />
+          </TouchableOpacity>
+        </View>
+
         <FlatList
           data={chunks(recs, 5)}
           renderItem={({ item }) => (
