@@ -6,7 +6,9 @@ export default function Auth() {
   return (
     <SafeAreaView>
       <Link href="/(home)/">
-        <Text>Test</Text>
+        <Text style={{ fontFamily: "Inter_600SemiBold", fontSize: 48 }}>
+          Test
+        </Text>
       </Link>
     </SafeAreaView>
   );

@@ -1,4 +1,8 @@
-import { useFonts } from "expo-font";
+import {
+  Inter_300Light,
+  Inter_600SemiBold,
+  useFonts,
+} from "@expo-google-fonts/inter";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -10,7 +14,8 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Inter_300Light,
+    Inter_600SemiBold,
   });
 
   useEffect(() => {
