@@ -4,7 +4,7 @@ from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 
-api_key = open(".api_key", "r").read()
+api_key = open(".api_key_tune", "r").read()
 
 def run_text(template, **kwargs):
     chat_model = ChatOpenAI(
@@ -39,4 +39,5 @@ def run_multimodal(template, image, **kwargs):
     )
     chain = prompt | chat_model
     resp = chain.invoke({"image": image})
+    print(resp.content)
     return json.loads(resp.content.replace("```json","").replace("```",""))

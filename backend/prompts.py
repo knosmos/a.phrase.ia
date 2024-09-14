@@ -12,7 +12,8 @@ PICTURE_TO_TEXT_PROMPT = """
     # Task Description
     Provided is an image of an object. Create a short description of the object (1-2 words),
     as well as a longer description (1 sentence). Ignore all items in the background
-    of the image. Output in JSON format.
+    of the image. Do not include any information about any items that are not the object.
+    Output in JSON format.
 
     # Output Format
     {{
