@@ -9,6 +9,8 @@ import {
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useEffect, useRef, useState } from "react";
 import config from "@/config.json";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 export default function Home() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -34,18 +36,18 @@ export default function Home() {
           body: JSON.stringify({ user_id: "1", b64_image: data?.base64 }),
         })
           .then((res) => res.json())
-          .then((data) => alert(data.long));
+          .then((data) => {
+            AsyncStorage.setItem("emoji", JSON.stringify(data));
+          })
+          .finally(() => {
+            router.navigate("/(home)/");
+          });
       });
   }
 
   return (
     <View style={styles.container}>
-      <CameraView
-        style={styles.camera}
-        facing="back"
-        ref={cameraRef}
-        pictureSize="Medium"
-      >
+      <CameraView style={styles.camera} facing="back" ref={cameraRef}>
         <View style={styles.btn}>
           <TouchableOpacity onPress={handleTakePicture}>
             <MaterialCommunityIcons

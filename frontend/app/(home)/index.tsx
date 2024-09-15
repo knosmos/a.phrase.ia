@@ -12,8 +12,9 @@ import {
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import config from "@/config.json";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import * as Speech from "expo-speech";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const handleLoadMore = () => {
   //TODO: Load more
@@ -39,6 +40,25 @@ export default function Home() {
       "🍭",
       "🍮",
     ]);
+
+    const i = setInterval(() => {
+      AsyncStorage.getItem("emojis").then((data) => {
+        if (data && emojis.length === 0) {
+          setEmojis(JSON.parse(data));
+          AsyncStorage.removeItem("emojis");
+        }
+      });
+
+      AsyncStorage.getItem("emoji").then((data) => {
+        if (data) {
+          let x = JSON.parse(data);
+          setEmojis([...emojis, `b64|${x.emoji}|${x.short}`]);
+          AsyncStorage.removeItem("emoji");
+        }
+      });
+    }, 500);
+
+    return () => clearInterval(i);
   }, []);
 
   function handleSentenceGen() {
@@ -49,11 +69,18 @@ export default function Home() {
       },
       body: JSON.stringify({
         user_id: "1",
-        emoji_seq: [...emojis],
+        emoji_seq: emojis.map((x) =>
+          x.startsWith("b64") ? x.split("|")[2] : x
+        ),
       }),
     })
       .then((res) => res.json())
       .then((data) => Speech.speak(data, { language: "en" }));
+  }
+
+  async function handleCamera() {
+    await AsyncStorage.setItem("emojis", JSON.stringify(emojis));
+    router.navigate("/(home)/camera");
   }
 
   return (
@@ -92,9 +119,9 @@ export default function Home() {
       </View>
       <View style={styles.footBar}>
         <View style={styles.row}>
-          <Link href="/(home)/camera">
+          <TouchableOpacity onPress={handleCamera}>
             <AntDesign name="camera" size={36} color="black" />
-          </Link>
+          </TouchableOpacity>
           <Button onPress={handleLoadMore} title="Load More"></Button>
         </View>
       </View>

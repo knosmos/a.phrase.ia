@@ -34,6 +34,25 @@ export default function Emoji({
     );
   }
 
+  if (data.startsWith("b64")) {
+    return (
+      <View
+        style={{
+          ...styles.container,
+          opacity: muted ? 0.4 : 1,
+          height: size,
+          width: size,
+        }}
+      >
+        <Image
+          style={styles.image}
+          source={`data:image/png;base64,${data.split("|")[1]}`}
+          contentFit="cover"
+        />
+      </View>
+    );
+  }
+
   return (
     <View
       style={{
