@@ -4,6 +4,7 @@ import {
   Button,
   SafeAreaView,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -54,6 +55,7 @@ export default function Home() {
       {loading && (
         <View style={styles.circular}>
           <ActivityIndicator size="large" />
+          <Text style={{ color: "white" }}>Processing...</Text>
         </View>
       )}
 
@@ -97,6 +99,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "column",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     zIndex: 20,
   },

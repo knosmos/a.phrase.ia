@@ -46,7 +46,7 @@ export default function Emoji({
       >
         <Image
           style={styles.image}
-          source={`data:image/png;base64,${data.split("|")[1]}`}
+          source={`data:image/*;base64,${data.split("|")[1]}`}
           contentFit="cover"
         />
       </View>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: "100%",
-    height: "100%",
+    width: "90%",
+    height: "90%",
   },
 });

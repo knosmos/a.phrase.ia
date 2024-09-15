@@ -48,7 +48,7 @@ export default function Home() {
         if (data) {
           let x = JSON.parse(data);
           setEmojis([...emojis, `b64|${x.emoji}|${x.short}`]);
-
+          handleRecommendation();
           AsyncStorage.removeItem("emoji");
         }
       });
@@ -157,7 +157,7 @@ export default function Home() {
       <View style={styles.gridForRecs}>
         <FlatList
           style={styles.flatList}
-          data={[recs.slice(2)]}
+          data={[recs]}
           renderItem={({ item }) => (
             <View style={styles.recRow}>
               {item.map((x, i) => (
