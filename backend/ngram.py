@@ -115,7 +115,7 @@ def add_to_markov_chain(text):
 
 
 def get_results(char: str, n: int) -> set[str]:
-    emojis = markov_chain[char]
+    emojis = markov_chain[char] if char in markov_chain else ()
     return set(emoji for emoji in emojis)
 
 
