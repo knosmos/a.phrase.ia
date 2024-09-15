@@ -47,7 +47,7 @@ export default function Home() {
       AsyncStorage.getItem("emoji").then((data) => {
         if (data) {
           let x = JSON.parse(data);
-          setEmojis([`b64|${x.emoji}|${x.short}`, ...emojis]);
+          setEmojis([...emojis, `b64|${x.emoji}|${x.short}`]);
 
           AsyncStorage.removeItem("emoji");
         }
@@ -92,7 +92,6 @@ export default function Home() {
       .then((res) => res.json())
       .then(async (data) => {
         const storedEmojis = await AsyncStorage.getItem("emojis");
-        console.log(storedEmojis);
         if (storedEmojis && storedEmojis.length > 0) {
           setRecs([JSON.parse(storedEmojis), ...data]);
         } else {
