@@ -1,2 +1,2 @@
-.api_key*
 __pycache__/
+.api_key_tune

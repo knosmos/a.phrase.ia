@@ -9,7 +9,7 @@ from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_community.llms import OpenAI
 from langchain_community.chat_models import ChatOpenAI
 
-api_key = open(".api_key_tune", "r").read()
+api_key = open(".api_key_tune", "r").read().strip()
 
 def run_text(template, **kwargs):
     chat_model = ChatOpenAI(
