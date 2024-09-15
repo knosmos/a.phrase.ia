@@ -139,7 +139,7 @@ with open("emojis2.txt", "r", encoding="utf-8") as f:
     load_lines(f.readlines()[1:])
 
 # print(markov_chain)
-print(get_results('✈', 2))
+# print(get_results('✈', 2))
 
     # print(*get_n_grams(f.readlines()[0], 2), sep="\n")
     

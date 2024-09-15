@@ -71,15 +71,16 @@ async def image_gen(payload: ImageGenPayload):
 
 @app.post("/recommend")
 async def recommend(payload: RecommendationPayload):
-    live_list = set()
-    for i in payload.emoji_seq:
-        try:
-            live_list |= ngram.get_results(i, 2)
-        except:
-            pass
-    live_list = list(live_list)
-    n = max(0, 40 - len(live_list))
-    return live_list + ngram.get_initial(n)
+        
+    return ngram.get_results(payload.emoji_seq[-1], 40)
+    # for i in payload.emoji_seq:
+    #     try:
+    #         live_list |= ngram.get_results(i, 2)
+    #     except:
+    #         pass
+    # live_list = list(live_list)
+    # n = max(0, 40 - len(live_list))
+    # return live_list + ngram.get_initial(n)
 
 @app.post("/create-user")
 async def create_user(uid):
