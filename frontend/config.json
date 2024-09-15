@@ -1,3 +1,4 @@
 {
-  "API_URL": "http://10.29.214.141:8000"
+  "API_URL": "http://10.29.214.141:8000",
+  "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_dmFsaWQtZ29ibGluLTcyLmNsZXJrLmFjY291bnRzLmRldiQ"
 }
