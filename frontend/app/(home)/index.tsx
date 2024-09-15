@@ -9,6 +9,7 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -24,6 +25,7 @@ export default function Home() {
   const [emojis, setEmojis] = useState<string[]>([]);
   const [recs, setRecs] = useState<string[]>([]);
   const [std, setStd] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const handleDelete = () => {
     const temp = emojis.slice(0, -1);
@@ -57,6 +59,7 @@ export default function Home() {
   }, []);
 
   function handleSentenceGen() {
+    setLoading(true);
     fetch(config.API_URL + "/sentence-gen", {
       method: "POST",
       headers: {
@@ -70,7 +73,11 @@ export default function Home() {
       }),
     })
       .then((res) => res.json())
-      .then((data) => Speech.speak(data, { language: "en" }));
+      .then((data) => Speech.speak(data, { language: "en" }))
+      .finally(() => {
+        setLoading(false);
+        setEmojis([]);
+      });
   }
 
   async function handleRecommendation() {
@@ -117,9 +124,13 @@ export default function Home() {
           </ScrollView>
         </View>
         <View style={styles.go}>
-          <TouchableOpacity onPress={handleSentenceGen}>
-            <FontAwesome name="send" size={24} color="black" />
-          </TouchableOpacity>
+          {loading ? (
+            <FontAwesome name="send" size={24} color="gray" />
+          ) : (
+            <TouchableOpacity onPress={handleSentenceGen}>
+              <FontAwesome name="send" size={24} color="black" />
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.delete}>
           <TouchableOpacity onPress={handleDelete}>

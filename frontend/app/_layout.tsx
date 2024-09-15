@@ -23,10 +23,10 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
-    }
 
-    // TODO: Demo purposes
-    router.navigate("/auth");
+      // TODO: Demo purposes
+      router.navigate("/auth");
+    }
   }, [loaded]);
 
   if (!loaded) {
