@@ -13,11 +13,7 @@ import {
 import AntDesign from "@expo/vector-icons/AntDesign";
 import config from "@/config.json";
 import { Link } from "expo-router";
-
-// const chunks = (a: any[], size: number) =>
-//   Array.from(new Array(Math.ceil(a.length / size)), (_, i) =>
-//     a.slice(i * size, i * size + size)
-//   );
+import * as Speech from "expo-speech";
 
 const handleLoadMore = () => {
   //TODO: Load more
@@ -57,7 +53,7 @@ export default function Home() {
       }),
     })
       .then((res) => res.json())
-      .then((data) => alert(data));
+      .then((data) => Speech.speak(data, { language: "en" }));
   }
 
   return (
