@@ -130,11 +130,13 @@ def load_lines(lines):
 
 
 with open("emojis.txt", "r", encoding="utf-8") as f:
-    for line in f.read().split("\n"):
-        add_to_markov_chain(line)
-        add_to_freq_table(line)
-    print(markov_chain)
-    # print(get_results('🦮', 2))
+    load_lines(f.readlines()[1:])
+
+with open("emojis2.txt", "r", encoding="utf-8") as f:
+    load_lines(f.readlines()[1:])
+
+print(markov_chain)
+print(get_results('🦮', 2))
 
     # print(*get_n_grams(f.readlines()[0], 2), sep="\n")
     
