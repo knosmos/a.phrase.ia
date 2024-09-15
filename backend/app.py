@@ -4,8 +4,9 @@ from typing import List
 from prompts import *
 import json
 import llm
-import diffusion_hf
+import diffusion_hf as diffusion
 import ngram
+import mongo
 
 class SentenceGenPayload(BaseModel):
     user_id: str
@@ -31,6 +32,13 @@ async def index():
 
 @app.post("/sentence-gen")
 async def sentence_gen(payload: SentenceGenPayload):
+    mongo.collection.update_one({
+        "uid": payload.user_id
+    }, {
+        "$addToSet" : {
+            "history": payload.emoji_seq
+        }
+    })
     return llm.run_text(
         SENTENCE_GEN_PROMPT,
         emoji_seq=",".join(payload.emoji_seq)
@@ -45,17 +53,44 @@ async def image_description(payload: ImageDescPayload):
     text_json["emoji"] = diffusion.gen_emoji(
         "data:image/jpeg;base64," + text_json["long"]
     )
+    mongo.collection.update_one({
+        "uid": payload.user_id
+    }, {
+        "$addToSet" : {
+            "custom_emoji": text_json
+        }
+    })
     return text_json
 
 @app.post("/image-gen")
 async def image_gen(payload: ImageGenPayload):
-    return diffusion.gen_emoji(
+    res = diffusion.gen_emoji(
         payload.description
     )
+    return res
 
 @app.post("/recommend")
 async def recommend(payload: RecommendationPayload):
-    try:
-        return list(set(ngram.get_results(i) for i in payload.emoji_seq))
-    except:
-        return []
+    live_list = set()
+    for i in payload.emoji_seq:
+        try:
+            live_list |= ngram.get_results(i, 2)
+        except:
+            pass
+    live_list = list(live_list)
+    n = max(0, 40 - len(live_list))
+    return live_list + ngram.get_initial(n)
+
+@app.post("/create-user")
+async def create_user(uid):
+    mongo.collection.insert_one({
+        "uid": uid,
+        "custom_emoji": [],
+        "history": []
+    })
+
+@app.get("/load-user")
+async def load_user(uid):
+    data = mongo.collection.find_one({"uid": uid})
+    ngram.load_lines(data.history)
+    return data
