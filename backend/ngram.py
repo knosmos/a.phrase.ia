@@ -1,5 +1,5 @@
 ILLEGAL_CHARACTERS = {chr(i) for i in range(127)}
-
+MODIFIERS = {"\ufe0f", "\u2642", "\u200d"}
 
 """
 emoji1: [emoji2, ]
@@ -9,7 +9,7 @@ markov_chain = {}
 freq_table = {}
 
 def get_n_grams(text, n):
-    for ch in ILLEGAL_CHARACTERS:
+    for ch in ILLEGAL_CHARACTERS | MODIFIERS:
         text = text.replace(ch, "")
     return [tuple(text[i:i+n]) for i in range(len(text) - n + 1)]
 
@@ -49,7 +49,7 @@ with open("emojis.txt", "r", encoding="utf-8") as f:
     for line in f.read().split("\n"):
         add_to_markov_chain(line)
         add_to_freq_table(line)
-    # print(markov_chain)
+    print(markov_chain)
     print(get_results('🦮', 2))
 
     # print(*get_n_grams(f.readlines()[0], 2), sep="\n")
