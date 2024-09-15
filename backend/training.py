@@ -16,9 +16,14 @@ CONVERSION_PROMPT = """
 
 with open("twitter_dataset.csv", "r") as f:
     reader = csv.reader(f, delimiter=",", quotechar='"')
-    for row in list(reader)[1:]:
-        print(row)
 
-# x = run_text(CONVERSION_PROMPT, text="fuck you")
-# print(x)
+    with open("emojis.txt", "w") as out:
+        for row in list(reader)[1:1000]:
+            emojis = run_text(CONVERSION_PROMPT, text=row[2])
+            print(emojis)
+            out.write(emojis)
+
+
+x = run_text(CONVERSION_PROMPT, text="hi do you want pizza?")
+print(x)
 
