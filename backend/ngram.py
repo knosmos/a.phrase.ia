@@ -1,3 +1,5 @@
+from collections import Counter, OrderedDict
+
 ILLEGAL_CHARACTERS = {chr(i) for i in range(127)}
 MODIFIERS = {
     # Skin Tone Modifiers
@@ -116,7 +118,8 @@ def add_to_markov_chain(text):
 
 def get_results(char: str, n: int) -> set[str]:
     emojis = markov_chain[char] if char in markov_chain else ()
-    return set(emoji for emoji in emojis)
+    frequency = Counter(emojis)
+    return list(OrderedDict.fromkeys(sorted(emojis, key=lambda x: (-frequency[x], x))))[:n]
 
 
 def get_initial(n):
@@ -135,8 +138,8 @@ with open("emojis.txt", "r", encoding="utf-8") as f:
 with open("emojis2.txt", "r", encoding="utf-8") as f:
     load_lines(f.readlines()[1:])
 
-print(markov_chain)
-print(get_results('🦮', 2))
+# print(markov_chain)
+print(get_results('✈', 2))
 
     # print(*get_n_grams(f.readlines()[0], 2), sep="\n")
     
