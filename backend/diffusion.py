@@ -5,9 +5,10 @@ import base64
 from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
 
 pipe = StableDiffusionPipeline.from_pretrained(
-    "valhalla/emoji-diffusion",
-    # "Mobius-labs/emoji_model_msfluentui",
+    # "valhalla/emoji-diffusion",
+    "Mobius-labs/emoji_model_msfluentui",
     # "CompVis/stable-diffusion-v1-4",
+    # "black-forest-labs/FLUX.1-schnell",
     torch_dtype=torch.float16,
 ).to("cuda")
 euler = EulerDiscreteScheduler.from_config(pipe.scheduler.config)

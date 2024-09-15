@@ -4,7 +4,7 @@ from typing import List
 from prompts import *
 import json
 import llm
-import diffusion
+import diffusion_hf
 
 class SentenceGenPayload(BaseModel):
     user_id: str
@@ -42,7 +42,7 @@ async def image_description(payload: ImageDescPayload):
         image=payload.b64_image
     )
     text_json["emoji"] = diffusion.gen_emoji(
-        "data:image/jpeg;base64," + text_json["short"]
+        "data:image/jpeg;base64," + text_json["long"]
     )
     return text_json
 

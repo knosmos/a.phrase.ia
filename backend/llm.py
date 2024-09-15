@@ -1,5 +1,10 @@
 import json
 import requests
+import cv2
+from PIL import Image
+import numpy as np
+from io import BytesIO
+import base64
 from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_community.llms import OpenAI
 from langchain_community.chat_models import ChatOpenAI
@@ -23,6 +28,16 @@ def run_multimodal(template, image, **kwargs):
         openai_api_base="https://proxy.tune.app/",
         model_name="mistral/pixtral-12B-2409"
     )
+    
+    img = Image.open(BytesIO(base64.b64decode(image)))
+    base_width = 300
+    wpercent = (base_width / float(img.size[0]))
+    hsize = int((float(img.size[1]) * float(wpercent)))
+    img = img.resize((base_width, hsize), Image.Resampling.LANCZOS)
+    buffered = BytesIO()
+    img.save(buffered, format="JPEG")
+    img_str = base64.b64encode(buffered.getvalue()).decode("u8")
+
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", template),
@@ -38,6 +53,6 @@ def run_multimodal(template, image, **kwargs):
         ]
     )
     chain = prompt | chat_model
-    resp = chain.invoke({"image": image})
+    resp = chain.invoke({"image": img_str})
     print(resp.content)
     return json.loads(resp.content.replace("```json","").replace("```",""))
