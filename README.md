@@ -1,5 +1,6 @@
 # a.phrase.ia
-helping speech-impaired patients communicate through natural language, using multimodal AI | HackMIT 2024
+
+helping speech-impaired patients communicate through natural language, using multimodal AI | *HackMIT 2024*
 ---
 
 ## What it does
@@ -16,4 +17,4 @@ To learn and adapt to each user, we store user histories in MongoDB that are use
 Building an intuitive app without any text. Fighting react-native (WHY does it not have CSS-grid. Or a canvas). Fighting 22434 different AI models. Trying to parse emoji.
 
 ## Accomplishments that we're proud of
-Pulling together so many different systems and technologies in a short period of time. Building an app that (we think) uses LLMs without just being yet another ChatGPT wrapper (in fact, LLM text outputs are never displayed). Resisting the urge to down multiple RedBulls during the dark hours of the night.
+Pulling together so many different systems and technologies in a short period of time. Building an app that (we think) uses LLMs without just being yet another ChatGPT wrapper (in fact, LLM text outputs are never displayed).

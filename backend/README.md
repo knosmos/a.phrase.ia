@@ -3,7 +3,7 @@
 ## Components
 - [x] Emoji to sentence
 - [x] Camera image/drawn sketch to text phrase
-- [ ] Text phrase to emoji
-- [ ] Recommendation algorithm
-- [ ] Common emoji storage (Mongo)
-- [ ] User profile storage
+- [x] Text phrase to emoji
+- [x] Recommendation algorithm
+- [x] Common emoji storage (Mongo)
+- [x] User profile storage
