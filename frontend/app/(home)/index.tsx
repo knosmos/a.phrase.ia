@@ -176,13 +176,11 @@ export default function Home() {
           )}
         />
       </View>
-      <View style={styles.footBar}>
+      <TouchableOpacity onPress={handleCamera} style={styles.footBar}>
         <View style={styles.row}>
-          <TouchableOpacity onPress={handleCamera}>
-            <AntDesign name="camera" size={36} color="black" />
-          </TouchableOpacity>
+          <AntDesign name="camera" size={36} color="white" />
         </View>
-      </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -289,7 +287,7 @@ const styles = StyleSheet.create({
     padding: 16,
     width: "100%",
     bottom: 0,
-    backgroundColor: "#fff",
+    backgroundColor: "#c9550c",
     alignItems: "center",
   },
   flatList: {
