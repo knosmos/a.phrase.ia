@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Button,
   View,
   TouchableOpacity,
   FlatList,
@@ -13,10 +14,14 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import config from "@/config.json";
 import { Link } from "expo-router";
 
-const chunks = (a: any[], size: number) =>
-  Array.from(new Array(Math.ceil(a.length / size)), (_, i) =>
-    a.slice(i * size, i * size + size)
-  );
+// const chunks = (a: any[], size: number) =>
+//   Array.from(new Array(Math.ceil(a.length / size)), (_, i) =>
+//     a.slice(i * size, i * size + size)
+//   );
+
+const handleLoadMore = () => {
+  //TODO: Load more
+};
 
 export default function Home() {
   const [emojis, setEmojis] = useState<string[]>([]);
@@ -24,10 +29,23 @@ export default function Home() {
 
   useEffect(() => {
     // TODO: Load recommendations
-    setRecs(["🍕", "🍔", "🍟", "🍦", "🍩", "🍪", "🍫", "🍬", "🍭", "🍮"]);
+    setRecs([
+      "❓",
+      "❗",
+      "🍕",
+      "🍔",
+      "🍟",
+      "🍦",
+      "🍩",
+      "🍪",
+      "🍫",
+      "🍬",
+      "🍭",
+      "🍮",
+    ]);
   }, []);
 
-  function handleSetenceGen(punctuation: string) {
+  function handleSentenceGen() {
     fetch(config.API_URL + "/sentence-gen", {
       method: "POST",
       headers: {
@@ -35,7 +53,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         user_id: "1",
-        emoji_seq: [...emojis, punctuation],
+        emoji_seq: [...emojis],
       }),
     })
       .then((res) => res.json())
@@ -54,26 +72,14 @@ export default function Home() {
             )}
           </ScrollView>
         </View>
-        <Link href="/(home)/camera">
-          <AntDesign name="camera" size={36} color="black" />
-        </Link>
+        <View style={styles.go}>
+          <Button onPress={handleSentenceGen} title="Go" />
+        </View>
       </View>
 
       <View style={styles.grid}>
-        <View style={styles.row}>
-          <TouchableOpacity onPress={() => handleSetenceGen(".")}>
-            <EmojiRec item={"."} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSetenceGen("?")}>
-            <EmojiRec item={"?"} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSetenceGen("!")}>
-            <EmojiRec item={"!"} />
-          </TouchableOpacity>
-        </View>
-
         <FlatList
-          data={chunks(recs, 5)}
+          data={[recs]}
           renderItem={({ item }) => (
             <View style={styles.row}>
               {item.map((x, i) => (
@@ -88,6 +94,14 @@ export default function Home() {
           )}
         />
       </View>
+      <View style={styles.footBar}>
+        <View style={styles.row}>
+          <Link href="/(home)/camera">
+            <AntDesign name="camera" size={36} color="black" />
+          </Link>
+          <Button onPress={handleLoadMore} title="Load More"></Button>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -95,7 +109,7 @@ export default function Home() {
 function EmojiRec({ item }: { item: string }) {
   return (
     <View style={styles.reccontainer}>
-      <Emoji size={60} data={item} />
+      <Emoji size={120} data={item} />
     </View>
   );
 }
@@ -125,12 +139,14 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    padding: 4,
+    padding: 10,
   },
   row: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-start",
     marginBottom: 16,
+    gap: 20,
+    flexWrap: "wrap",
   },
   reccontainer: {
     backgroundColor: "#fff",
@@ -142,12 +158,39 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    padding: 4,
+    padding: 0,
   },
   emojis: {
     gap: 2,
   },
   grid: {
     flex: 7,
+    width: "100%",
+    padding: 16,
+  },
+  go: {
+    position: "absolute",
+    right: 30,
+  },
+  footBar: {
+    position: "absolute",
+    padding: 16,
+    width: "100%",
+    bottom: 0,
+    backgroundColor: "#fff",
+    alignItems: "center",
   },
 });
+
+// sides aligned with search bar
+// emojis bigger
+// spacing smaller
+// make padding within emoji container smaller
+// Set emojis on top bar
+// Recommended emojis in bottom
+// Sing button
+// Go button
+// Speak button
+// Load more button
+// Camera button
+// x button
