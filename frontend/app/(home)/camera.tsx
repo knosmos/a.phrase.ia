@@ -1,5 +1,6 @@
 import { CameraView, useCameraPermissions } from "expo-camera";
 import {
+  ActivityIndicator,
   Button,
   SafeAreaView,
   StyleSheet,
@@ -15,6 +16,7 @@ import { router } from "expo-router";
 export default function Home() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
+  const [loading, setLoading] = useState(false);
 
   if (!permission || !permission.granted) {
     return (
@@ -25,6 +27,7 @@ export default function Home() {
   }
 
   function handleTakePicture() {
+    setLoading(true);
     cameraRef.current
       ?.takePictureAsync({ base64: true, quality: 0 })
       .then((data) => {
@@ -40,6 +43,7 @@ export default function Home() {
             AsyncStorage.setItem("emoji", JSON.stringify(data));
           })
           .finally(() => {
+            setLoading(false);
             router.navigate("/(home)/");
           });
       });
@@ -47,6 +51,12 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
+      {loading && (
+        <View style={styles.circular}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
+
       <CameraView style={styles.camera} facing="back" ref={cameraRef}>
         <View style={styles.btn}>
           <TouchableOpacity onPress={handleTakePicture}>
@@ -78,5 +88,16 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "center",
+  },
+  circular: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 20,
   },
 });
