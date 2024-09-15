@@ -71,16 +71,15 @@ async def image_gen(payload: ImageGenPayload):
 
 @app.post("/recommend")
 async def recommend(payload: RecommendationPayload):
-        
-    return ngram.get_results(payload.emoji_seq[-1], 40)
-    # for i in payload.emoji_seq:
-    #     try:
-    #         live_list |= ngram.get_results(i, 2)
-    #     except:
-    #         pass
-    # live_list = list(live_list)
-    # n = max(0, 40 - len(live_list))
-    # return live_list + ngram.get_initial(n)
+    custom = mongo.collection.find_one({"uid": payload.user_id})["custom_emoji"]
+    custom_list = []
+    for i in custom:
+        custom_list.append(f'b64|{i["emoji"]}|{i["short"]}')
+    live_list = []
+    for i in payload.emoji_seq:
+        live_list += ngram.get_results(i, 10)
+    #n = max(0, 40 - len(live_list))
+    return live_list + ngram.get_initial(40)
 
 @app.post("/create-user")
 async def create_user(uid):
