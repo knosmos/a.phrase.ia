@@ -5,6 +5,7 @@ from prompts import *
 import json
 import llm
 import diffusion_hf
+import ngram
 
 class SentenceGenPayload(BaseModel):
     user_id: str
@@ -54,4 +55,7 @@ async def image_gen(payload: ImageGenPayload):
 
 @app.post("/recommend")
 async def recommend(payload: RecommendationPayload):
-    return "get some sleep"
+    try:
+        return list(set(ngram.get_results(i) for i in payload.emoji_seq))
+    except:
+        return []
