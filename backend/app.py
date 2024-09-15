@@ -4,6 +4,7 @@ from typing import List
 from prompts import *
 import json
 import llm
+import diffusion
 
 class SentenceGenPayload(BaseModel):
     user_id: str
@@ -36,14 +37,20 @@ async def sentence_gen(payload: SentenceGenPayload):
 
 @app.post("/image-description")
 async def image_description(payload: ImageDescPayload):
-    return llm.run_multimodal(
+    text_json = llm.run_multimodal(
         PICTURE_TO_TEXT_PROMPT,
         image=payload.b64_image
     )
+    text_json["emoji"] = diffusion.gen_emoji(
+        "data:image/jpeg;base64," + text_json["short"]
+    )
+    return text_json
 
 @app.post("/image-gen")
 async def image_gen(payload: ImageGenPayload):
-    return "here have image"
+    return diffusion.gen_emoji(
+        payload.description
+    )
 
 @app.post("/recommend")
 async def recommend(payload: RecommendationPayload):
