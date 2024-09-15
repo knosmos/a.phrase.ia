@@ -18,6 +18,7 @@ import * as Speech from "expo-speech";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useAuth } from "@clerk/clerk-expo";
 
 export default function Home() {
   const [emojis, setEmojis] = useState<string[]>([]);
@@ -27,10 +28,6 @@ export default function Home() {
   const handleDelete = () => {
     const temp = emojis.slice(0, -1);
     setEmojis(temp);
-  };
-
-  const handleLoadMore = () => {
-    //TODO: Load more
   };
 
   useEffect(() => {
